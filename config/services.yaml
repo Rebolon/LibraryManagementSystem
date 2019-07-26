@@ -32,3 +32,9 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # do not move this into imported file, because all imported files are autowired, even with autowire false
+    App\Swagger\SwaggerDecorator:
+        decorates: 'api_platform.swagger.normalizer.documentation'
+        arguments: [ '@App\Swagger\SwaggerDecorator.inner', '%login_username_path%', '%login_password_path%' ]
+        autoconfigure: false

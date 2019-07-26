@@ -4,6 +4,7 @@ import { HydraAdmin, hydraClient, fetchHydra as baseFetchHydra } from '@api-plat
 import ReactDOM from 'react-dom';
 import authProvider from './src/authProvider';
 import { Route, Redirect } from 'react-router-dom';
+import {MyLoginPage} from "./src/components/login";
 
 const entrypoint = document.getElementById('api-entrypoint').innerText;
 // Fetch api route with Http Basic auth instead of JWT Bearer system
@@ -43,4 +44,5 @@ ReactDOM.render(
         authProvider={authProvider}
         entrypoint={entrypoint}
         dataProvider={dataProvider}
+        loginPage={MyLoginPage}
     />, document.getElementById('api-platform-admin'));

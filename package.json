@@ -18,7 +18,7 @@
         "build": "encore production --progress"
     },
     "dependencies": {
-        "@api-platform/admin": "^0.6.3",
+        "@api-platform/admin": "^0.6.2",
         "react": "^16.8.6",
         "react-dom": "^16.8.6"
     }
