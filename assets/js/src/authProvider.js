@@ -32,7 +32,7 @@ export default (type, params) => {
             break;
 
         case AUTH_ERROR:
-            if (401 === params.status || 403 === params.status) {
+            if (401 === params.status) {
                 localStorage.removeItem('username');
                 localStorage.removeItem('token');
 

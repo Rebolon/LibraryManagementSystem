@@ -2,18 +2,32 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiProperty;
+use ApiPlatform\Core\Annotation\ApiResource;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\App\UserRepository")
+ * @ApiResource(
+ *     iri="http://schema.org/Person",
+ *     accessControl="is_granted('ROLE_ADMIN')",
+ *     attributes={
+ *          "access_control"="is_granted('ROLE_ADMIN')",
+ *          "status_code"=403,
+ *          "pagination_client_enabled"=true,
+ *     })
+ *
+ * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  */
 class User implements UserInterface
 {
     /**
+     * @ApiProperty(iri="http://schema.org/identifier")
+     *
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
@@ -21,7 +35,10 @@ class User implements UserInterface
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ApiProperty(iri="http://schema.org/email")
+     *
+     * @ORM\Column(type="string", length=180, unique=true, nullable=false)
+     * @Assert\NotBlank()
      */
     private $email;
 
@@ -32,7 +49,8 @@ class User implements UserInterface
 
     /**
      * @var string The hashed password
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=false)
+     * @Assert\NotBlank())
      */
     private $password;
 
@@ -45,6 +63,13 @@ class User implements UserInterface
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $apiTokenTtl;
+
+    /**
+    * @ApiProperty(iri="http://schema.org/Corporation")
+    *
+    * @ORM\ManyToOne(targetEntity="App\Entity\Company", inversedBy="users")
+    */
+    private $company;
 
     public function getId(): ?int
     {
@@ -66,6 +91,8 @@ class User implements UserInterface
     /**
      * A visual identifier that represents this user.
      *
+     * @ApiProperty(iri="http://schema.org/name")
+     *
      * @see UserInterface
      */
     public function getUsername(): string
@@ -85,9 +112,15 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
-    public function setRoles(array $roles): self
+    //public function setRoles(array $roles): self
+    public function setRoles($roles): self
     {
-        $this->roles = $roles;
+        // @todo i didn't find a quick solution to react-admin that does't manage ["value"] as array, but as string which cause the Api to fail
+        // i prefer to type the signature ith array $roles but for instance i just want it to work in both case: if i send array it's ok, and with
+        // react admin it will also works
+        if (!is_array($roles)) {
+            $roles = explode(',', $roles);
+        }
 
         return $this;
     }
@@ -133,6 +166,25 @@ class User implements UserInterface
     public function setApiTokenTtl(DateTime $ttl): self
     {
         $this->apiTokenTtl = $ttl;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCompany()
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param mixed $company
+     * @return User
+     */
+    public function setCompany($company)
+    {
+        $this->company = $company;
 
         return $this;
     }

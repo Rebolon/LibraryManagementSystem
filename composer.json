@@ -15,6 +15,7 @@
         "api-platform/admin-pack": "^1.0",
         "api-platform/api-pack": "^1.2",
         "doctrine/doctrine-migrations-bundle": "^2.0",
+        "fzaninotto/faker": "^1.8",
         "sensio/framework-extra-bundle": "^5.4",
         "symfony/console": "4.3.*",
         "symfony/dotenv": "4.3.*",

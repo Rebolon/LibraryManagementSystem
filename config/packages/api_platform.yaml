@@ -31,7 +31,10 @@ api_platform:
         ApiPlatform\Core\Exception\InvalidArgumentException: 'HTTP_BAD_REQUEST' # Or a `Symfony\Component\HttpFoundation\Response`'s constant
         ApiPlatform\Core\Exception\ItemNotFoundException: 404
         Symfony\Component\HttpKernel\Exception\NotFoundHttpException: 404
+        # should be fixed in 2018: https://github.com/symfony/symfony/issues/25806
         Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException: 403
+        # i expected ApiPlatform to manage this one natively, but it doesn't seem @see https://github.com/api-platform/admin/issues/193
+        Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException: 403
         Symfony\Component\Security\Core\Exception\AuthenticationException: 401
         Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTFailureException: 401
         Symfony\Component\HttpKernel\Exception\HttpException: 500
